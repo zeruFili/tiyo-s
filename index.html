@@ -156,19 +156,73 @@
     /* ---------- Meet ---------- */
     .meet .split__media { aspect-ratio: 270 / 370; max-width: 460px; }
     .meet .split__media img { object-position: center 25%; }
-    .meet .split__text { display: flex; flex-direction: column; align-items: center; text-align: center; gap: clamp(28px, 6vw, 80px); }
-    .meet .copy { text-align: left; }
-    .meet .eyebrow { text-align: center; }
-    .more-arrow {
-      position: relative; display: flex; align-items: center; justify-content: center;
-      width: 100%; max-width: 540px; height: 80px; color: var(--red); margin-inline: auto;
-      font-size: .65rem; letter-spacing: .15em; font-weight: 500;
+    .meet .split__text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: clamp(20px, 3.2vw, 36px);
+      max-width: 480px;
     }
-    .more-arrow svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-    .more-arrow svg line, .more-arrow svg polyline { stroke: var(--red); stroke-width: .8; fill: none; vector-effect: non-scaling-stroke; transition: transform .5s var(--ease); }
-    .more-arrow span { position: relative; background: #fff; padding: 0 8px; }
-    .more-arrow:hover svg polyline { transform: translateX(10px); }
-    .meet .split__text .more-arrow { margin-left: calc(-1 * clamp(80px, 12vw, 190px)); width: calc(100% + clamp(80px, 12vw, 190px)); max-width: none; }
+    .meet .copy { text-align: left; max-width: 42ch; }
+    .meet .eyebrow { text-align: left; }
+
+    /* ---------- Haute Couture Atelier CTA Button ---------- */
+    .atelier-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 28px;
+      border: 1px solid var(--red);
+      color: var(--red);
+      font-family: var(--font-sans);
+      font-size: .68rem;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      border-radius: 999px;
+      background: transparent;
+      transition: color .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+      margin-top: 4px;
+    }
+    .atelier-cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--red);
+      transform: translateY(102%);
+      transition: transform .35s var(--ease);
+      z-index: 0;
+    }
+    .atelier-cta__text,
+    .atelier-cta__arrow {
+      position: relative;
+      z-index: 1;
+    }
+    .atelier-cta__arrow {
+      display: flex;
+      align-items: center;
+      transition: transform .35s var(--ease);
+    }
+    .atelier-cta__arrow svg {
+      display: block;
+      width: 15px;
+      height: 12px;
+    }
+    .atelier-cta:hover {
+      color: #fff;
+      border-color: var(--red);
+      box-shadow: 0 6px 20px rgba(163, 21, 21, .2);
+    }
+    .atelier-cta:hover::before {
+      transform: translateY(0);
+    }
+    .atelier-cta:hover .atelier-cta__arrow {
+      transform: translateX(5px);
+    }
 
     /* ---------- Bestseller / Signature Pieces ---------- */
     .best { padding-top: clamp(24px, 5vw, 70px); }
@@ -255,7 +309,6 @@
        ========================================================= */
     @media (max-width: 960px) {
       .copy { font-size: .76rem; }
-      .meet .split__text .more-arrow { margin-left: 0; width: 100%; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
 
@@ -279,11 +332,10 @@
 
       .split, .category--collection .split, .category--journal .split { grid-template-columns: 1fr; row-gap: 28px; }
       .meet .split__media { max-width: none; aspect-ratio: 4 / 4.3; }
-      .meet .split__text { gap: 24px; }
+      .meet .split__text { gap: 20px; align-items: flex-start; text-align: left; }
       .meet .split__media { order: 1; }
       .meet .split__text { order: 2; }
       .meet .copy { max-width: none; font-size: .74rem; }
-      .meet .more-arrow { height: 56px; }
       .category .split__media { order: 1; }
       .category .split__text { order: 2; }
       .category .copy { max-width: none; }
@@ -378,12 +430,13 @@
             Discover the living harmony of ancestral craftsmanship, sustainable pure cotton, and cosmopolitan elegance.<br>
             Step into a world where timeless traditions become tomorrow's fashion statements.
           </p>
-          <a href="#journal" class="more-arrow" aria-label="More about our story">
-            <svg viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true">
-              <line x1="0" y1="40" x2="392" y2="40"/>
-              <polyline points="250,2 398,40 250,78"/>
-            </svg>
-            <span>MORE</span>
+          <a href="#journal" class="atelier-cta" aria-label="Explore the Tiyo atelier story">
+            <span class="atelier-cta__text">Explore The Atelier</span>
+            <span class="atelier-cta__arrow" aria-hidden="true">
+              <svg viewBox="0 0 16 12" fill="none">
+                <path d="M1 6h13M9 1l5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </a>
         </div>
       </div>
@@ -402,7 +455,7 @@
             <!-- Item 1 (Sequence #3: photo_3.jpg) -->
             <article class="product" data-name="Sartorial Loom Kimono Blazer">
               <div class="product__img">
-                <img src="asset/photo_3.jpg" alt="Model wearing oversized handwoven grey grid kimono blazer with crisp white shirt and tie" loading="lazy" style="object-position: center 20%;">
+                <img src="asset/photo_4.jpg" alt="Model wearing oversized handwoven grey grid kimono blazer with crisp white shirt and tie" loading="lazy" style="object-position: center 20%;">
                 <button class="heart" aria-label="Add Sartorial Loom Kimono Blazer to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
                 <button class="add-cart" data-add>ADD TO BAG</button>
               </div>
@@ -412,7 +465,7 @@
             <!-- Item 2 (Sequence #4: photo_4.jpg) -->
             <article class="product" data-name="Verdant Garden Heritage Blazer">
               <div class="product__img">
-                <img src="asset/photo_4.jpg" alt="Model in emerald green handwoven geometric blazer cardigan seated on cruiser bicycle in rose garden" loading="lazy" style="object-position: center 25%;">
+                <img src="asset/col_1.jpg" alt="Model in emerald green handwoven geometric blazer cardigan seated on cruiser bicycle in rose garden" loading="lazy" style="object-position: center 25%;">
                 <button class="heart" aria-label="Add Verdant Garden Heritage Blazer to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
                 <button class="add-cart" data-add>ADD TO BAG</button>
               </div>
@@ -422,7 +475,7 @@
             <!-- Item 3 (Sequence #5: photo_5.jpg) -->
             <article class="product" data-name="Grand Touring Diamond Cardigan">
               <div class="product__img">
-                <img src="asset/photo_5.jpg" alt="Model on vintage bronze sports car wearing black knit cardigan with monochrome diamond woven panels" loading="lazy" style="object-position: center 25%;">
+                <img src="asset/col_2.jpg" alt="Model on vintage bronze sports car wearing black knit cardigan with monochrome diamond woven panels" loading="lazy" style="object-position: center 25%;">
                 <button class="heart" aria-label="Add Grand Touring Diamond Cardigan to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
                 <button class="add-cart" data-add>ADD TO BAG</button>
               </div>
@@ -432,7 +485,7 @@
             <!-- Item 4 (Sequence #6: photo_6.jpg) -->
             <article class="product" data-name="Vanguard Cropped Tibeb Jacket">
               <div class="product__img">
-                <img src="asset/photo_6.jpg" alt="Model wearing camel and ivory geometric handwoven cropped jacket with white pleated skirt" loading="lazy" style="object-position: center 20%;">
+                <img src="asset/col_3.jpg" alt="Model wearing camel and ivory geometric handwoven cropped jacket with white pleated skirt" loading="lazy" style="object-position: center 20%;">
                 <button class="heart" aria-label="Add Vanguard Cropped Tibeb Jacket to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
                 <button class="add-cart" data-add>ADD TO BAG</button>
               </div>
@@ -450,14 +503,14 @@
             </article>
 
             <!-- Item 6 (Sequence #3: photo_3.jpg) -->
-            <article class="product" data-name="Monochrome Executive Loom Coat">
+            <!-- <article class="product" data-name="Monochrome Executive Loom Coat">
               <div class="product__img">
                 <img src="asset/photo_3.jpg" alt="Tailored monochrome woven executive coat blending traditional loom craft with corporate sartorial style" loading="lazy" style="object-position: center 20%;">
                 <button class="heart" aria-label="Add Monochrome Executive Loom Coat to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
                 <button class="add-cart" data-add>ADD TO BAG</button>
               </div>
               <div class="product__meta"><div class="product__name">Monochrome Executive Loom Coat</div><div class="product__price">$380</div></div>
-            </article>
+            </article> -->
 
           </div>
 
@@ -484,7 +537,7 @@
           <a href="#shop" class="link-more">DISCOVER LOOKBOOK</a>
         </div>
         <div class="split__media reveal">
-          <img src="asset/photo_4.jpg"
+          <img src="asset/photo_3.jpg"
                alt="Editorial showcase: Gentleman wearing emerald green artisanal handwoven blazer seated on bicycle in tranquil rose garden" loading="lazy" style="object-position: center 25%;">
         </div>
       </div>
