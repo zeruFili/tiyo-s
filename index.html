@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiyo — Traditional Meets Modern Fashion</title>
+  <meta name="description" content="Tiyo is an artisanal fashion house celebrating authentic traditional craftsmanship and contemporary silhouettes — timeless modern heritage tailored for the global wardrobe.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       Tiyo — Traditional Meets Modern Fashion Styles
+       ========================================================= */
+
+    /* ---------- Design tokens ---------- */
+    :root {
+      --red: #a31515;
+      --red-dark: #7d0f0f;
+      --ink: #1d1a18;
+      --muted: #4a4541;
+      --paper: #ffffff;
+      --sand: #efeae3;
+      --clay: #d9cfc2;
+
+      --font-serif: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-script: "Allura", cursive;
+      --font-brush: "Permanent Marker", "Marker Felt", cursive;
+
+      --gutter: clamp(20px, 6vw, 96px);
+      --maxw: 1180px;
+      --ease: cubic-bezier(.22, .61, .36, 1);
+    }
+
+    /* ---------- Reset / base ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-weight: 400;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    h1, h2, h3, p { margin: 0; }
+    :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+    .container { width: 100%; max-width: calc(var(--maxw) + var(--gutter) * 2); margin-inline: auto; padding-inline: var(--gutter); }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* Image fallback (used by JS if a remote image fails) */
+    .img-fallback { background: linear-gradient(135deg, #e7ddd0, #cdbfae); }
+    .img-fallback img { opacity: 0; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* ---------- Header ---------- */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(8px);
+      transition: box-shadow .3s;
+    }
+    .site-header.is-scrolled { box-shadow: 0 1px 0 rgba(0, 0, 0, .08); }
+    .header-inner {
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      height: 64px;
+    }
+    .logo { font-family: var(--font-serif); font-size: 1.45rem; font-weight: 600; letter-spacing: .02em; }
+    .nav-list { display: flex; gap: clamp(14px, 2vw, 26px); }
+    .nav-list a { font-size: .68rem; letter-spacing: .05em; text-transform: uppercase; padding: 6px 2px; position: relative; }
+    .nav-list a::after {
+      content: ""; position: absolute; left: 0; bottom: 2px; width: 100%; height: 1px;
+      background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease);
+    }
+    .nav-list a:hover::after, .nav-list a.is-active::after { transform: scaleX(1); }
+    .header-actions { display: flex; justify-content: flex-end; align-items: center; gap: 12px; font-size: .68rem; }
+    .header-actions a { letter-spacing: .05em; text-transform: uppercase; }
+    .header-actions a:hover { color: var(--red); }
+    .icon-btn { position: relative; display: inline-grid; place-items: center; width: 28px; height: 28px; }
+    .icon-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .icon-btn.is-on svg { fill: var(--red); stroke: var(--red); }
+    .badge {
+      position: absolute; top: -2px; right: -4px; min-width: 14px; height: 14px; padding: 0 3px;
+      border-radius: 99px; background: var(--red); color: #fff; font-size: .5rem; line-height: 14px; text-align: center;
+      transform: scale(0); transition: transform .25s var(--ease);
+    }
+    .badge.has-items { transform: scale(1); }
+    .menu-toggle { display: none; width: 32px; height: 32px; position: relative; }
+    .menu-toggle span { position: absolute; left: 6px; right: 6px; height: 1.5px; background: var(--ink); transition: transform .3s, opacity .3s, top .3s; }
+    .menu-toggle span:nth-child(1) { top: 11px; }
+    .menu-toggle span:nth-child(2) { top: 16px; }
+    .menu-toggle span:nth-child(3) { top: 21px; }
+    .menu-toggle.is-open span:nth-child(1) { top: 16px; transform: rotate(45deg); }
+    .menu-toggle.is-open span:nth-child(2) { opacity: 0; }
+    .menu-toggle.is-open span:nth-child(3) { top: 16px; transform: rotate(-45deg); }
+
+    /* ---------- Hero ---------- */
+    .hero { position: relative; padding: clamp(36px, 6vw, 70px) 0 0; overflow: hidden; }
+    .hero-stage {
+      position: relative; width: 100%; max-width: 1320px; margin-inline: auto;
+      aspect-ratio: 665 / 245;
+    }
+    .hero-title {
+      position: absolute; inset: 0; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      gap: clamp(120px, 24vw, 320px);
+      font-family: var(--font-brush); font-weight: 400; color: var(--red);
+      font-size: min(28vw, 380px); line-height: 1; letter-spacing: -.02em; white-space: nowrap;
+      -webkit-text-stroke: 0.025em var(--red);
+      user-select: none;
+    }
+    .hero-title span { display: inline-block; transition: transform .6s var(--ease); }
+    .hero-stage:hover .hero-title span:first-child { transform: translateX(-2%) rotate(-1.5deg); }
+    .hero-stage:hover .hero-title span:last-child { transform: translateX(2%) rotate(1.5deg); }
+    .hero-image {
+      position: absolute; z-index: 2; top: 0; left: 50%; transform: translateX(-50%);
+      width: 31.3%; height: 100%; overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+    }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; transition: transform 1.4s var(--ease); }
+    .hero-stage:hover .hero-image img { transform: scale(1.06); }
+    .hero-squiggle { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .hero-squiggle path { fill: none; stroke: rgba(255, 255, 255, .85); stroke-width: .7; stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 3.2s .6s var(--ease) forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+
+    .go-shop {
+      display: block; width: max-content; margin: clamp(20px, 3.5vw, 40px) auto 0;
+      font-family: var(--font-script); font-size: clamp(1.2rem, 2vw, 1.6rem); color: var(--red);
+      transform: rotate(-4deg); position: relative;
+    }
+    .go-shop::after { content: ""; position: absolute; left: 0; bottom: 2px; height: 1px; width: 100%; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .4s var(--ease); }
+    .go-shop:hover::after { transform: scaleX(1); }
+
+    /* ---------- Shared split section ---------- */
+    .section { padding: clamp(56px, 9vw, 120px) 0; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; align-items: center; column-gap: clamp(28px, 7vw, 100px); }
+    .split__media { overflow: hidden; }
+    .split__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+    .split__media:hover img { transform: scale(1.04); }
+    .eyebrow { font-family: var(--font-serif); font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1.15; }
+    .eyebrow em { display: block; font-style: normal; color: var(--red); }
+    .copy { font-size: .72rem; line-height: 1.7; color: var(--ink); max-width: 38ch; }
+
+    /* ---------- Meet ---------- */
+    .meet .split__media { aspect-ratio: 270 / 370; max-width: 460px; }
+    .meet .split__media img { object-position: center 25%; }
+    .meet .split__text { display: flex; flex-direction: column; align-items: center; text-align: center; gap: clamp(28px, 6vw, 80px); }
+    .meet .copy { text-align: left; }
+    .meet .eyebrow { text-align: center; }
+    .more-arrow {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 100%; max-width: 540px; height: 80px; color: var(--red); margin-inline: auto;
+      font-size: .65rem; letter-spacing: .15em; font-weight: 500;
+    }
+    .more-arrow svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .more-arrow svg line, .more-arrow svg polyline { stroke: var(--red); stroke-width: .8; fill: none; vector-effect: non-scaling-stroke; transition: transform .5s var(--ease); }
+    .more-arrow span { position: relative; background: #fff; padding: 0 8px; }
+    .more-arrow:hover svg polyline { transform: translateX(10px); }
+    .meet .split__text .more-arrow { margin-left: calc(-1 * clamp(80px, 12vw, 190px)); width: calc(100% + clamp(80px, 12vw, 190px)); max-width: none; }
+
+    /* ---------- Bestseller / Signature Pieces ---------- */
+    .best { padding-top: clamp(24px, 5vw, 70px); }
+    .section-title { font-family: var(--font-serif); font-weight: 500; font-size: clamp(1.8rem, 2.8vw, 2.5rem); text-align: center; }
+    .best-wrap { position: relative; display: flex; gap: clamp(16px, 3vw, 40px); margin-top: clamp(28px, 4vw, 56px); padding-left: var(--gutter); }
+    .vertical-script {
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      font-family: var(--font-script); color: var(--red); font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+      line-height: 1.15; white-space: nowrap; align-self: center; flex: 0 0 auto;
+    }
+    .best-main { flex: 1; min-width: 0; }
+    .slider { display: flex; gap: clamp(12px, 1.6vw, 22px); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: grab; padding-right: var(--gutter); -webkit-overflow-scrolling: touch; }
+    .slider::-webkit-scrollbar { display: none; }
+    .slider.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+    .product { flex: 0 0 clamp(160px, 21vw, 260px); scroll-snap-align: start; }
+    .product__img { position: relative; aspect-ratio: 138 / 184; overflow: hidden; background: var(--sand); }
+    .product__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease); pointer-events: none; -webkit-user-drag: none; }
+    .product:hover .product__img img { transform: scale(1.06); }
+    .heart { position: absolute; top: 8px; right: 10px; width: 26px; height: 26px; display: grid; place-items: center; color: #fff; background: rgba(0, 0, 0, .2); border-radius: 50%; backdrop-filter: blur(4px); transition: background .2s; }
+    .heart svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.6; transition: transform .25s var(--ease), fill .2s; }
+    .heart:hover { background: rgba(0, 0, 0, .4); }
+    .heart:hover svg { transform: scale(1.25); }
+    .heart.is-on { background: rgba(255, 255, 255, .9); color: var(--red); }
+    .heart.is-on svg { fill: var(--red); stroke: var(--red); }
+    .add-cart {
+      position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 0; text-align: center;
+      background: rgba(255, 255, 255, .95); color: var(--red); font-size: .62rem; font-weight: 500; letter-spacing: .12em;
+      transform: translateY(100%); transition: transform .35s var(--ease);
+    }
+    .product:hover .add-cart, .add-cart:focus-visible { transform: none; }
+    .product__meta { margin-top: 12px; font-size: .65rem; line-height: 1.5; }
+    .product__name { font-weight: 500; }
+    .product__price { color: var(--muted); margin-top: 2px; }
+
+    .slider-bar { display: flex; align-items: center; gap: 18px; margin-top: 20px; padding-right: var(--gutter); }
+    .progress { position: relative; flex: 1; height: 1px; background: rgba(163, 21, 21, .25); }
+    .progress__fill { position: absolute; left: 0; top: -.5px; height: 2px; width: 20%; background: var(--red); transition: transform .15s linear; }
+    .slider-btns { display: flex; gap: 8px; }
+    .slider-btns button { width: 32px; height: 32px; border: 1px solid rgba(163, 21, 21, .4); border-radius: 50%; color: var(--red); display: grid; place-items: center; transition: background .25s, color .25s; }
+    .slider-btns button:hover { background: var(--red); color: #fff; }
+    .slider-btns svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+
+    /* ---------- Category / Editorial sections ---------- */
+    .category .eyebrow { margin-bottom: clamp(18px, 3vw, 40px); }
+    .category .copy { max-width: 38ch; }
+    .link-more { display: inline-block; margin-top: clamp(28px, 5vw, 60px); font-size: .64rem; letter-spacing: .08em; font-weight: 500; color: var(--red); text-decoration: underline; text-underline-offset: 4px; }
+    .link-more:hover { color: var(--red-dark); }
+    .category--collection .split__media { aspect-ratio: 270 / 330; }
+    .category--collection .split__media img { object-position: center 25%; }
+    .category--journal .split__media { aspect-ratio: 270 / 320; }
+    .category--journal .split__media img { object-position: center 25%; }
+    .category--collection .split { grid-template-columns: .95fr 1.05fr; }
+    .category--journal .split { grid-template-columns: 1.05fr .95fr; }
+
+    /* ---------- Instagram ---------- */
+    .insta { padding: clamp(40px, 7vw, 100px) 0; }
+    .insta-grid { display: grid; grid-template-columns: auto 1fr auto 1fr auto; align-items: stretch; }
+    .insta-word { font-family: var(--font-serif); font-weight: 500; color: var(--red); font-size: clamp(2.6rem, 7.5vw, 7.5rem); line-height: 1; display: flex; align-items: center; padding-inline: clamp(8px, 1.4vw, 20px); }
+    .insta-photo { overflow: hidden; min-height: 200px; }
+    .insta-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; transition: transform 1.1s var(--ease); }
+    .insta-photo:hover img { transform: scale(1.06); }
+    .insta-mid { display: flex; align-items: center; gap: clamp(10px, 2vw, 28px); }
+    .insta-sub { font-size: .68rem; line-height: 1.5; max-width: 14ch; display: flex; flex-direction: column; gap: 8px; }
+    .insta-sub svg { width: 46px; height: 8px; stroke: var(--red); fill: none; stroke-width: 1; }
+
+    /* ---------- Footer ---------- */
+    .site-footer { background: var(--sand); padding: clamp(40px, 6vw, 80px) 0 28px; }
+    .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1.4fr; gap: clamp(24px, 4vw, 60px); }
+    .footer-grid h3 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 500; margin-bottom: 12px; }
+    .footer-grid li, .footer-grid p { font-size: .7rem; line-height: 2; }
+    .footer-grid a:hover { color: var(--red); }
+    .newsletter { display: flex; border-bottom: 1px solid var(--ink); margin-top: 12px; }
+    .newsletter input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 10px 0; font: inherit; font-size: .72rem; outline: none; }
+    .newsletter button { color: var(--red); font-size: .65rem; font-weight: 500; letter-spacing: .12em; padding: 0 4px 0 12px; }
+    .form-msg { min-height: 1.2em; margin-top: 8px; font-size: .64rem; color: var(--red); }
+    .footer-bottom { margin-top: clamp(30px, 5vw, 60px); padding-top: 18px; border-top: 1px solid rgba(0, 0, 0, .12); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: .64rem; color: var(--muted); }
+
+    /* ---------- Toast ---------- */
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 30px); background: var(--ink); color: #fff; font-size: .72rem; padding: 12px 22px; border-radius: 3px; box-shadow: 0 6px 20px rgba(0, 0, 0, .18); opacity: 0; pointer-events: none; transition: .35s var(--ease); z-index: 100; }
+    .toast.is-show { opacity: 1; transform: translate(-50%, 0); }
+
+    /* =========================================================
+       Responsive
+       ========================================================= */
+    @media (max-width: 960px) {
+      .copy { font-size: .76rem; }
+      .meet .split__text .more-arrow { margin-left: 0; width: 100%; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .header-inner { grid-template-columns: 1fr auto; }
+      .menu-toggle { display: block; order: 3; }
+      .header-actions { order: 2; margin-right: 8px; }
+      .main-nav {
+        position: fixed; inset: 64px 0 auto 0; background: #fff; padding: 12px var(--gutter) 28px;
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        transform: translateY(-12px); opacity: 0; visibility: hidden; transition: .3s var(--ease);
+      }
+      .main-nav.is-open { transform: none; opacity: 1; visibility: visible; }
+      .nav-list { flex-direction: column; gap: 0; }
+      .nav-list a { display: block; font-size: .85rem; padding: 14px 0; border-bottom: 1px solid rgba(0, 0, 0, .06); }
+      .nav-list a::after { display: none; }
+
+      .hero-stage { aspect-ratio: 665 / 320; }
+      .hero-title { font-size: 32vw; gap: clamp(80px, 24vw, 160px); }
+      .hero-image { width: 44%; }
+
+      .split, .category--collection .split, .category--journal .split { grid-template-columns: 1fr; row-gap: 28px; }
+      .meet .split__media { max-width: none; aspect-ratio: 4 / 4.3; }
+      .meet .split__text { gap: 24px; }
+      .meet .split__media { order: 1; }
+      .meet .split__text { order: 2; }
+      .meet .copy { max-width: none; font-size: .74rem; }
+      .meet .more-arrow { height: 56px; }
+      .category .split__media { order: 1; }
+      .category .split__text { order: 2; }
+      .category .copy { max-width: none; }
+      .category .link-more { margin-top: 20px; }
+
+      .product { flex-basis: 44vw; }
+      .best-wrap { padding-left: 14px; gap: 10px; }
+      .slider-btns { display: none; }
+      .add-cart { transform: none; position: static; background: transparent; padding: 6px 0 0; text-align: left; }
+
+      .insta-grid { grid-template-columns: 1fr; }
+      .insta-word { font-size: 4.6rem; justify-content: flex-start; }
+      .insta-photo { height: 180px; min-height: 0; }
+      .insta-mid { justify-content: space-between; }
+      .insta-mid .insta-word { font-size: 4.6rem; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .reveal { opacity: 1; transform: none; }
+      .hero-squiggle path { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a href="#top" class="logo" aria-label="Tiyo home">Tiyo</a>
+
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
+        <ul class="nav-list">
+          <li><a href="#top" class="is-active" data-nav>Main</a></li>
+          <li><a href="#about" data-nav>About</a></li>
+          <li><a href="#shop" data-nav>Shop</a></li>
+          <li><a href="#collection" data-nav>Collection</a></li>
+          <li><a href="#journal" data-nav>Journal</a></li>
+          <li><a href="#contacts" data-nav>Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#shop">Lookbook</a>
+        <button class="icon-btn" id="wishlist-btn" aria-label="Wishlist">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg>
+          <span class="badge" id="wishlist-count">0</span>
+        </button>
+        <button class="icon-btn" id="cart-btn" aria-label="Shopping bag">
+          <svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="badge" id="cart-count">0</span>
+        </button>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ HERO (Sequence #1: photo_1.jpg) ============ -->
+    <section class="hero" aria-label="Welcome">
+      <div class="hero-stage">
+        <h1 class="hero-title" aria-label="Tiyo"><span>Ti</span><span>yo</span></h1>
+        <div class="hero-image">
+          <img src="asset/photo_1.jpg"
+               alt="Smiling young woman wearing Tiyo handwoven coral and mustard diamond patterned waistcoat vest over lace crop top with wide-leg denim" loading="eager">
+          <svg class="hero-squiggle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M5 62 C 12 30, 20 30, 25 55 S 36 82, 42 50 S 52 22, 58 52 S 70 80, 76 48 S 86 26, 95 56"/>
+          </svg>
+        </div>
+      </div>
+      <a href="#shop" class="go-shop">discover the collection</a>
+    </section>
+
+    <!-- ============ MEET TIYO (Sequence #2: photo_2.jpg) ============ -->
+    <section class="section meet" id="about" aria-labelledby="meet-title">
+      <div class="container split">
+        <div class="split__media reveal">
+          <img src="asset/photo_2.jpg"
+               alt="Tiyo studio rack showcasing a curated collection of handwoven artisanal kimonos and jackets against warm terracotta backdrop" loading="lazy">
+        </div>
+
+        <div class="split__text reveal">
+          <h2 class="eyebrow" id="meet-title">meet <em>Tiyo</em></h2>
+          <p class="copy">
+            Welcome to our atelier, where ancestral textile craftsmanship converges with contemporary silhouette.<br>
+            Tiyo is an independent fashion house dedicated to reimagining authentic handwoven heritage textiles for modern lifestyles. From structured waistcoats and flowing robes to geometric woven kimonos, every creation is meticulously tailored.<br>
+            Discover the living harmony of ancestral craftsmanship, sustainable pure cotton, and cosmopolitan elegance.<br>
+            Step into a world where timeless traditions become tomorrow's fashion statements.
+          </p>
+          <a href="#journal" class="more-arrow" aria-label="More about our story">
+            <svg viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="0" y1="40" x2="392" y2="40"/>
+              <polyline points="250,2 398,40 250,78"/>
+            </svg>
+            <span>MORE</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SIGNATURE PIECES (Sequence: 3 -> 4 -> 5 -> 6 -> 2 -> 3) ============ -->
+    <section class="best" id="shop" aria-labelledby="best-title">
+      <h2 class="section-title reveal" id="best-title">Signature Pieces</h2>
+
+      <div class="best-wrap reveal">
+        <span class="vertical-script" aria-hidden="true">Woven with Heritage,<br>Worn with Grace</span>
+
+        <div class="best-main">
+          <div class="slider" id="slider" tabindex="0" aria-label="Signature fashion pieces">
+
+            <!-- Item 1 (Sequence #3: photo_3.jpg) -->
+            <article class="product" data-name="Sartorial Loom Kimono Blazer">
+              <div class="product__img">
+                <img src="asset/photo_3.jpg" alt="Model wearing oversized handwoven grey grid kimono blazer with crisp white shirt and tie" loading="lazy" style="object-position: center 20%;">
+                <button class="heart" aria-label="Add Sartorial Loom Kimono Blazer to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+                <button class="add-cart" data-add>ADD TO BAG</button>
+              </div>
+              <div class="product__meta"><div class="product__name">Sartorial Loom Kimono Blazer</div><div class="product__price">$360</div></div>
+            </article>
+
+            <!-- Item 2 (Sequence #4: photo_4.jpg) -->
+            <article class="product" data-name="Verdant Garden Heritage Blazer">
+              <div class="product__img">
+                <img src="asset/photo_4.jpg" alt="Model in emerald green handwoven geometric blazer cardigan seated on cruiser bicycle in rose garden" loading="lazy" style="object-position: center 25%;">
+                <button class="heart" aria-label="Add Verdant Garden Heritage Blazer to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+                <button class="add-cart" data-add>ADD TO BAG</button>
+              </div>
+              <div class="product__meta"><div class="product__name">Verdant Garden Heritage Blazer</div><div class="product__price">$320</div></div>
+            </article>
+
+            <!-- Item 3 (Sequence #5: photo_5.jpg) -->
+            <article class="product" data-name="Grand Touring Diamond Cardigan">
+              <div class="product__img">
+                <img src="asset/photo_5.jpg" alt="Model on vintage bronze sports car wearing black knit cardigan with monochrome diamond woven panels" loading="lazy" style="object-position: center 25%;">
+                <button class="heart" aria-label="Add Grand Touring Diamond Cardigan to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+                <button class="add-cart" data-add>ADD TO BAG</button>
+              </div>
+              <div class="product__meta"><div class="product__name">Grand Touring Diamond Cardigan</div><div class="product__price">$395</div></div>
+            </article>
+
+            <!-- Item 4 (Sequence #6: photo_6.jpg) -->
+            <article class="product" data-name="Vanguard Cropped Tibeb Jacket">
+              <div class="product__img">
+                <img src="asset/photo_6.jpg" alt="Model wearing camel and ivory geometric handwoven cropped jacket with white pleated skirt" loading="lazy" style="object-position: center 20%;">
+                <button class="heart" aria-label="Add Vanguard Cropped Tibeb Jacket to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+                <button class="add-cart" data-add>ADD TO BAG</button>
+              </div>
+              <div class="product__meta"><div class="product__name">Vanguard Cropped Tibeb Jacket</div><div class="product__price">$345</div></div>
+            </article>
+
+            <!-- Item 5 (Sequence #2: photo_2.jpg - restart from 2!) -->
+            <article class="product" data-name="Artisanal Capsule Kimono Robe">
+              <div class="product__img">
+                <img src="asset/photo_2.jpg" alt="Handcrafted multi-tonal heritage kimono robe from the Tiyo atelier studio rack collection" loading="lazy" style="object-position: center 25%;">
+                <button class="heart" aria-label="Add Artisanal Capsule Kimono Robe to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+                <button class="add-cart" data-add>ADD TO BAG</button>
+              </div>
+              <div class="product__meta"><div class="product__name">Artisanal Capsule Kimono Robe</div><div class="product__price">$410</div></div>
+            </article>
+
+            <!-- Item 6 (Sequence #3: photo_3.jpg) -->
+            <article class="product" data-name="Monochrome Executive Loom Coat">
+              <div class="product__img">
+                <img src="asset/photo_3.jpg" alt="Tailored monochrome woven executive coat blending traditional loom craft with corporate sartorial style" loading="lazy" style="object-position: center 20%;">
+                <button class="heart" aria-label="Add Monochrome Executive Loom Coat to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2.1 0 3.9 1.2 5.6 3.2 1.7-2 3.5-3.2 5.6-3.2 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+                <button class="add-cart" data-add>ADD TO BAG</button>
+              </div>
+              <div class="product__meta"><div class="product__name">Monochrome Executive Loom Coat</div><div class="product__price">$380</div></div>
+            </article>
+
+          </div>
+
+          <div class="slider-bar">
+            <div class="progress" aria-hidden="true"><div class="progress__fill" id="progress-fill"></div></div>
+            <div class="slider-btns">
+              <button id="prev" aria-label="Previous products"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+              <button id="next" aria-label="Next products"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE COLLECTION (Sequence #4: photo_4.jpg) ============ -->
+    <section class="section category category--collection" id="collection" aria-labelledby="collection-title">
+      <div class="container split">
+        <div class="split__text reveal">
+          <h2 class="eyebrow" id="collection-title">The Collection</h2>
+          <p class="copy">
+            A vibrant dialogue between ancestral loom artistry and effortless modern leisure. Tiyo transforms authentic hand-loomed cotton and rich geometric weaves into breathable summer blazers, unstructured cardigans, and modern daytime staples.<br>
+            Tailored for tranquil gardens and sunlit city promenades alike, each garment celebrates cultural permanence with contemporary ease.
+          </p>
+          <a href="#shop" class="link-more">DISCOVER LOOKBOOK</a>
+        </div>
+        <div class="split__media reveal">
+          <img src="asset/photo_4.jpg"
+               alt="Editorial showcase: Gentleman wearing emerald green artisanal handwoven blazer seated on bicycle in tranquil rose garden" loading="lazy" style="object-position: center 25%;">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ JOURNAL (Sequence #5: photo_5.jpg) ============ -->
+    <section class="section category category--journal" id="journal" aria-labelledby="journal-title" style="padding-top:0">
+      <div class="container split">
+        <div class="split__media reveal">
+          <img src="asset/photo_5.jpg"
+               alt="Tiyo atelier journal: Model seated on classic bronze Jaguar E-Type in black diamond woven knitwear and cargo trousers" loading="lazy" style="object-position: center 25%;">
+        </div>
+        <div class="split__text reveal">
+          <h2 class="eyebrow" id="journal-title">Atelier Journal</h2>
+          <p class="copy">
+            Behind every Tiyo garment lies a living legacy — master weavers spinning pure cotton yarns, hand-setting wooden looms, and weaving intricate geometric diamond motifs into modern streetwear forms.<br>
+            We celebrate the intersection of heritage craftsmanship, timeless automotive elegance, and modern urban identity. Garments crafted not for a single season, but for generations.
+          </p>
+          <a href="#journal" class="link-more">READ MORE</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INSTAGRAM (Sequence #6: photo_6.jpg, Sequence #2: photo_2.jpg) ============ -->
+    <section class="insta" aria-label="Instagram">
+      <div class="container">
+        <div class="insta-grid reveal">
+          <div class="insta-word" aria-hidden="true">IN</div>
+          <a class="insta-photo" href="#contacts" aria-label="Follow Tiyo on Instagram: Fearless campaign editorial">
+            <img src="asset/photo_6.jpg" alt="Tiyo campaign editorial: Fearless spirit in handcrafted camel woven cropped jacket on swing" loading="lazy" style="object-position: center 25%;">
+          </a>
+          <div class="insta-mid">
+            <div class="insta-sub">
+              <span>Follow our journey — traditional heritage, reimagined.</span>
+              <svg viewBox="0 0 46 8" aria-hidden="true"><path d="M0 4h44M40 1l4 3-4 3"/></svg>
+            </div>
+            <div class="insta-word" aria-hidden="true">STA</div>
+          </div>
+          <a class="insta-photo" href="#contacts" aria-label="Follow Tiyo on Instagram: Atelier lookbook studio rack">
+            <img src="asset/photo_2.jpg" alt="Tiyo lookbook studio rack: Curated collection of handcrafted heritage kimonos and robes" loading="lazy" style="object-position: center 25%;">
+          </a>
+          <div class="insta-word" aria-hidden="true">GRAM</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer" id="contacts">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>Tiyo's Wear</h3>
+          <p>An independent fashion atelier celebrating authentic Ethiopian textile heritage through modern tailoring, sustainable craftsmanship, and contemporary silhouettes.</p>
+        </div>
+        <div>
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="#shop">Signature Pieces</a></li>
+            <li><a href="#shop">Handcrafted Kimonos</a></li>
+            <li><a href="#shop">Heritage Blazers</a></li>
+            <li><a href="#shop">Cropped Tibeb Jackets</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Atelier</h3>
+          <ul>
+            <li><a href="#about">About Tiyo</a></li>
+            <li><a href="#collection">The Collection</a></li>
+            <li><a href="#journal">Atelier Journal</a></li>
+            <li><a href="#contacts">Contact & Press</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Stay in touch</h3>
+          <p>Subscribe for private collection previews and atelier stories.</p>
+          <form class="newsletter" id="newsletter" novalidate>
+            <label class="sr-only" for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="Your email address" autocomplete="email" required>
+            <button type="submit">SUBSCRIBE</button>
+          </form>
+          <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year">2026</span> Tiyo's Wear. All rights reserved.</span>
+        <span>Traditional craft in every thread, modern elegance in every cut.</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* =========================================================
+       Tiyo — Interactions & Features
+       ========================================================= */
+    (function () {
+      'use strict';
+
+      var $  = function (s, c) { return (c || document).querySelector(s); };
+      var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+      /* ---------- Toast helper ---------- */
+      var toastEl = $('#toast'), toastTimer;
+      function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add('is-show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toastEl.classList.remove('is-show'); }, 2400);
+      }
+
+      /* ---------- Footer year ---------- */
+      $('#year').textContent = new Date().getFullYear();
+
+      /* ---------- Sticky header shadow ---------- */
+      var header = $('.site-header');
+      function onScrollHeader() { header.classList.toggle('is-scrolled', window.scrollY > 10); }
+      window.addEventListener('scroll', onScrollHeader, { passive: true });
+      onScrollHeader();
+
+      /* ---------- Mobile navigation ---------- */
+      var toggle = $('#menu-toggle'), nav = $('#main-nav');
+      function setMenu(open) {
+        toggle.classList.toggle('is-open', open);
+        nav.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+      }
+      toggle.addEventListener('click', function () { setMenu(!nav.classList.contains('is-open')); });
+      $$('a', nav).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+      window.addEventListener('resize', function () { if (window.innerWidth > 760) setMenu(false); });
+
+      /* ---------- Active nav link on scroll ---------- */
+      var navLinks = $$('[data-nav]');
+      var targets = navLinks.map(function (a) { return a.getAttribute('href') === '#top' ? $('#top') : $(a.getAttribute('href')); });
+      function updateActive() {
+        var y = window.scrollY + 120, current = 0;
+        targets.forEach(function (t, i) { if (t && t.offsetTop <= y) current = i; });
+        navLinks.forEach(function (a, i) { a.classList.toggle('is-active', i === current); });
+      }
+      window.addEventListener('scroll', updateActive, { passive: true });
+      updateActive();
+
+      /* ---------- Scroll reveal ---------- */
+      var reveals = $$('.reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
+          });
+        }, { threshold: 0.12 });
+        reveals.forEach(function (el) { io.observe(el); });
+      } else {
+        reveals.forEach(function (el) { el.classList.add('is-visible'); });
+      }
+
+      /* ---------- Image fallback if an image fails ---------- */
+      $$('img').forEach(function (img) {
+        function fail() {
+          if (img.parentElement) img.parentElement.classList.add('img-fallback');
+        }
+        img.addEventListener('error', fail);
+        if (img.complete && img.naturalWidth === 0 && img.src) fail();
+      });
+
+      /* ---------- Product slider ---------- */
+      var slider = $('#slider'), fill = $('#progress-fill');
+      var prev = $('#prev'), next = $('#next');
+
+      function step() {
+        var card = $('.product', slider);
+        return card ? card.getBoundingClientRect().width + 20 : 260;
+      }
+      function updateProgress() {
+        var max = slider.scrollWidth - slider.clientWidth;
+        var ratio = max > 0 ? slider.scrollLeft / max : 0;
+        var width = slider.clientWidth / slider.scrollWidth;
+        fill.style.width = Math.max(width * 100, 14) + '%';
+        fill.style.transform = 'translateX(' + (ratio * ((100 / Math.max(width, .14)) - 100)) + '%)';
+      }
+      slider.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+      updateProgress();
+
+      prev.addEventListener('click', function () { slider.scrollBy({ left: -step(), behavior: 'smooth' }); });
+      next.addEventListener('click', function () { slider.scrollBy({ left:  step(), behavior: 'smooth' }); });
+      slider.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { slider.scrollBy({ left:  step(), behavior: 'smooth' }); }
+        if (e.key === 'ArrowLeft')  { slider.scrollBy({ left: -step(), behavior: 'smooth' }); }
+      });
+
+      /* Drag-to-scroll with mouse */
+      var down = false, startX = 0, startLeft = 0, moved = false;
+      slider.addEventListener('mousedown', function (e) {
+        down = true; moved = false; startX = e.pageX; startLeft = slider.scrollLeft;
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (!down) return;
+        var dx = e.pageX - startX;
+        if (Math.abs(dx) > 4) { moved = true; slider.classList.add('is-dragging'); }
+        slider.scrollLeft = startLeft - dx;
+      });
+      window.addEventListener('mouseup', function () {
+        if (!down) return;
+        down = false; slider.classList.remove('is-dragging');
+      });
+      slider.addEventListener('click', function (e) {
+        if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+      }, true);
+
+      /* ---------- Wishlist hearts & cart ---------- */
+      var wishCount = 0, cartCount = 0;
+      var wishBadge = $('#wishlist-count'), cartBadge = $('#cart-count');
+      var wishBtn = $('#wishlist-btn');
+
+      function setBadge(el, n) { el.textContent = n; el.classList.toggle('has-items', n > 0); }
+
+      $$('.heart').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var on = btn.classList.toggle('is-on');
+          btn.setAttribute('aria-pressed', String(on));
+          wishCount += on ? 1 : -1;
+          setBadge(wishBadge, wishCount);
+          wishBtn.classList.toggle('is-on', wishCount > 0);
+          var name = btn.closest('.product').dataset.name;
+          toast(on ? name + ' saved to wishlist' : name + ' removed from wishlist');
+        });
+      });
+
+      $$('[data-add]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          cartCount += 1;
+          setBadge(cartBadge, cartCount);
+          var name = btn.closest('.product').dataset.name;
+          toast(name + ' added to bag');
+        });
+      });
+
+      $('#cart-btn').addEventListener('click', function () {
+        toast(cartCount ? 'Your bag has ' + cartCount + ' piece' + (cartCount > 1 ? 's' : '') : 'Your shopping bag is empty');
+      });
+      wishBtn.addEventListener('click', function () {
+        toast(wishCount ? 'You have ' + wishCount + ' saved piece' + (wishCount > 1 ? 's' : '') : 'Your wishlist is empty');
+      });
+
+      /* ---------- Newsletter validation ---------- */
+      var form = $('#newsletter'), email = $('#email'), msg = $('#form-msg');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim());
+        if (!ok) {
+          msg.textContent = 'Please enter a valid email address.';
+          email.focus();
+          return;
+        }
+        msg.textContent = 'Thank you — you are subscribed to Tiyo atelier updates!';
+        form.reset();
+      });
+      email.addEventListener('input', function () { msg.textContent = ''; });
+    })();
+  </script>
+</body>
+</html>
